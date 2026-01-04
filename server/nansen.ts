@@ -69,14 +69,23 @@ export const nansenRouter = router({
                 timeframe: '24h',
                 pagination: {
                   page: 1,
-                  page_size: 100
-                }
+                  per_page: 100
+                },
+                filters: {
+                  only_smart_money: false
+                },
+                order_by: [
+                  {
+                    field: 'volume_24h',
+                    direction: 'DESC'
+                  }
+                ]
               },
               {
-                headers: {
-                  'X-API-KEY': NANSEN_API_KEY,
-                  'Content-Type': 'application/json'
-                },
+              headers: {
+                'apiKey': NANSEN_API_KEY,
+                'Content-Type': 'application/json'
+              },
                 timeout: 15000
               }
             );
@@ -168,12 +177,18 @@ export const nansenRouter = router({
             },
             pagination: {
               page: 1,
-              page_size: 50
-            }
+              per_page: 50
+            },
+            order_by: [
+              {
+                field: 'smart_money_holders',
+                direction: 'DESC'
+              }
+            ]
           },
           {
             headers: {
-              'X-API-KEY': NANSEN_API_KEY,
+              'apiKey': NANSEN_API_KEY,
               'Content-Type': 'application/json'
             },
             timeout: 15000

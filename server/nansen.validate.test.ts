@@ -17,14 +17,23 @@ describe("Nansen API Key Validation", () => {
           timeframe: '24h',
           pagination: {
             page: 1,
-            page_size: 1 // Request minimal data
-          }
+            per_page: 1
+          },
+          filters: {
+            only_smart_money: false
+          },
+          order_by: [
+            {
+              field: 'volume_24h',
+              direction: 'DESC'
+            }
+          ]
         },
         {
-          headers: {
-            'X-API-KEY': apiKey,
-            'Content-Type': 'application/json'
-          },
+        headers: {
+          'apiKey': apiKey,
+          'Content-Type': 'application/json'
+        },
           timeout: 10000
         }
       );
@@ -37,6 +46,9 @@ describe("Nansen API Key Validation", () => {
       } else if (error.response?.status === 429) {
         // Rate limit is acceptable - means the key works
         console.log('API key is valid (rate limit reached)');
+      } else if (error.response?.data?.error === 'Insufficient credits') {
+        // Insufficient credits means authentication worked
+        console.log('API key is valid (insufficient credits - need to top up)');
       } else {
         throw new Error(`Nansen API validation failed: ${error.message}`);
       }

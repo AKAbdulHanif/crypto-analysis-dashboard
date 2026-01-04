@@ -34,3 +34,13 @@
 - [x] Remove hardcoded Nansen API key from code
 - [x] Move API key to environment variables
 - [x] Document security incident and key rotation procedure
+
+## API Key Update
+- [ ] Update NANSEN_API_KEY with validated key
+- [ ] Test Nansen API integration with new key
+- [ ] Verify Smart Money Analytics displays live data
+
+## Nansen API Fix
+- [x] Update request body to use correct format (per_page, filters, order_by)
+- [x] Test with correct authentication header (apiKey)
+- [ ] Verify Smart Money Analytics displays data (blocked by insufficient credits)
