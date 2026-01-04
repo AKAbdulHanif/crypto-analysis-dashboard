@@ -33,7 +33,6 @@ export function useCryptoPrices(options: UseCryptoPricesOptions = {}) {
     if (!enabled) return;
     
     try {
-      setIsLoading(true);
       setError(null);
       
       const response = await fetch('/api/prices');
@@ -42,12 +41,14 @@ export function useCryptoPrices(options: UseCryptoPricesOptions = {}) {
       if (result.success) {
         setPrices(result.data);
         setLastRefresh(new Date());
+        setIsLoading(false);
       } else {
         setError(result.error || 'Failed to fetch prices');
+        setIsLoading(false);
       }
     } catch (err) {
+      console.error('Price fetch error:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch prices');
-    } finally {
       setIsLoading(false);
     }
   };

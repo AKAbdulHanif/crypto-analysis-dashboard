@@ -120,12 +120,12 @@ export function SmartMoneyIndicator({ symbols }: SmartMoneyIndicatorProps) {
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{token.symbol}</CardTitle>
-                    <Badge className={getSignalColor(token.smartMoneySignal)}>
-                      {token.smartMoneySignal.toUpperCase()}
+                    <Badge className={getSignalColor(token.smartMoneySignal || 'neutral')}>
+                      {(token.smartMoneySignal || 'neutral').toUpperCase()}
                     </Badge>
                   </div>
                   <CardDescription className="text-xs">
-                    {token.chain.toUpperCase()} • {token.name}
+                    {(token.chain || 'unknown').toUpperCase()} • {token.name || 'Unknown'}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
