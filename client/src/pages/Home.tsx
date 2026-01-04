@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { LivePriceTicker } from "@/components/LivePriceTicker";
+import { SmartMoneyIndicator } from "@/components/SmartMoneyIndicator";
 import { UnlockCalendar } from "@/components/UnlockCalendar";
 import { TradingLevels } from "@/components/TradingLevels";
 import { MarketDominance } from "@/components/MarketDominance";
@@ -189,6 +190,11 @@ export default function Home() {
         {/* Live Price Ticker */}
         <section className="mb-12">
           <LivePriceTicker symbols={allSymbols} />
+        </section>
+
+        {/* Smart Money Analytics from Nansen */}
+        <section className="mb-12">
+          <SmartMoneyIndicator symbols={['SUI', 'LINK', 'APT', 'PYTH', 'EIGEN']} />
         </section>
 
         {/* Market Dominance Tracker - NEW */}

@@ -24,3 +24,8 @@
 ## New Tasks
 - [x] Add entry/exit price levels for all 12 tokens (not just 3 high-conviction)
 - [x] Create GitHub repository and push code
+
+## Nansen Integration
+- [x] Integrate Nansen API for price verification and on-chain analytics
+- [x] Add smart money flow tracking for each token
+- [ ] Implement whale movement alerts
