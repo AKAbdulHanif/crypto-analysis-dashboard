@@ -134,12 +134,12 @@ export function SmartMoneyIndicator({ symbols }: SmartMoneyIndicatorProps) {
                     <span className="text-sm font-semibold text-slate-700">Price</span>
                     <div className="text-right">
                       <div className="font-bold text-slate-900">
-                        ${token.price.toFixed(token.price < 1 ? 4 : 2)}
+                        ${(token.price || 0).toFixed((token.price || 0) < 1 ? 4 : 2)}
                       </div>
                       <div className={`text-xs font-semibold ${
                         token.priceChange24h > 0 ? 'text-green-600' : 'text-red-600'
                       }`}>
-                        {token.priceChange24h > 0 ? '+' : ''}{token.priceChange24h.toFixed(2)}%
+                        {(token.priceChange24h || 0) > 0 ? '+' : ''}{(token.priceChange24h || 0).toFixed(2)}%
                       </div>
                     </div>
                   </div>
@@ -186,7 +186,7 @@ export function SmartMoneyIndicator({ symbols }: SmartMoneyIndicatorProps) {
                   <div className="flex items-center justify-between text-xs pt-2 border-t">
                     <span className="text-slate-600">24h Volume</span>
                     <span className="font-semibold text-slate-900">
-                      ${(token.volume24h / 1000000).toFixed(2)}M
+                      ${((token.volume24h || 0) / 1000000).toFixed(2)}M
                     </span>
                   </div>
 
