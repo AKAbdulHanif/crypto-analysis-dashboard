@@ -2,7 +2,7 @@ import axios from 'axios';
 import { publicProcedure, router } from './_core/trpc';
 import { z } from 'zod';
 
-const NANSEN_API_KEY = 'i1P5zF51QhgX8q7KOrcNFQ5e5L1GIlnS';
+const NANSEN_API_KEY = process.env.NANSEN_API_KEY || '';
 const NANSEN_API_BASE = 'https://api.nansen.ai/api/v1';
 
 // Token symbol to contract address mapping for major chains

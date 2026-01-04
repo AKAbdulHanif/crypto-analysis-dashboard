@@ -29,3 +29,8 @@
 - [x] Integrate Nansen API for price verification and on-chain analytics
 - [x] Add smart money flow tracking for each token
 - [ ] Implement whale movement alerts
+
+## Security
+- [ ] Remove hardcoded Nansen API key from code
+- [ ] Move API key to environment variables
+- [ ] Update GitHub repository to remove exposed key from history
