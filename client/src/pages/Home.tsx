@@ -1,6 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
+import { TrendingUp, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { LivePriceTicker } from "@/components/LivePriceTicker";
+import { UnlockCalendar } from "@/components/UnlockCalendar";
+import { TradingLevels } from "@/components/TradingLevels";
 
 interface TokenMetrics {
   name: string;
@@ -168,6 +171,8 @@ const tierConfig = {
 };
 
 export default function Home() {
+  const allSymbols = tokens.map(t => t.symbol);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Header */}
@@ -180,6 +185,11 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
+        {/* Live Price Ticker */}
+        <section className="mb-12">
+          <LivePriceTicker symbols={allSymbols} />
+        </section>
+
         {/* Executive Summary */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-slate-900 mb-6">Executive Summary</h2>
@@ -213,6 +223,16 @@ export default function Home() {
               </div>
             </CardContent>
           </Card>
+        </section>
+
+        {/* Trading Levels - NEW */}
+        <section className="mb-12">
+          <TradingLevels />
+        </section>
+
+        {/* Unlock Calendar - NEW */}
+        <section className="mb-12">
+          <UnlockCalendar />
         </section>
 
         {/* Token Analysis Grid */}
