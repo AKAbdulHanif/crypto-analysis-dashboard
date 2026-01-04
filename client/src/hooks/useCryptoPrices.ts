@@ -1,4 +1,3 @@
-import { trpc } from '@/lib/trpc';
 import { useEffect, useState } from 'react';
 
 export interface CryptoPrice {
@@ -21,29 +20,46 @@ interface UseCryptoPricesOptions {
 
 export function useCryptoPrices(options: UseCryptoPricesOptions = {}) {
   const {
-    symbols,
     refreshInterval = 5 * 60 * 1000, // 5 minutes
     enabled = true
   } = options;
 
+  const [prices, setPrices] = useState<CryptoPrice[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
-  const { data, isLoading, error, refetch } = trpc.crypto.getPrices.useQuery(
-    { symbols },
-    {
-      enabled,
-      refetchInterval: refreshInterval,
-      refetchOnWindowFocus: true,
-      staleTime: refreshInterval / 2 // Consider data stale after half the refresh interval
+  const fetchPrices = async () => {
+    if (!enabled) return;
+    
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const response = await fetch('/api/prices');
+      const result = await response.json();
+      
+      if (result.success) {
+        setPrices(result.data);
+        setLastRefresh(new Date());
+      } else {
+        setError(result.error || 'Failed to fetch prices');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch prices');
+    } finally {
+      setIsLoading(false);
     }
-  );
+  };
 
-  // Track last refresh time
   useEffect(() => {
-    if (data?.success) {
-      setLastRefresh(new Date());
+    fetchPrices();
+
+    if (enabled) {
+      const interval = setInterval(fetchPrices, refreshInterval);
+      return () => clearInterval(interval);
     }
-  }, [data]);
+  }, [enabled, refreshInterval]);
 
   const formatPrice = (price: number): string => {
     if (price >= 1) {
@@ -72,14 +88,14 @@ export function useCryptoPrices(options: UseCryptoPricesOptions = {}) {
   };
 
   return {
-    prices: data?.data || [],
+    prices,
     isLoading,
-    error: error?.message || data?.error,
+    error,
     lastRefresh,
-    refetch,
+    refetch: fetchPrices,
     formatPrice,
     formatMarketCap,
     formatVolume,
-    isSuccess: data?.success || false
+    isSuccess: !error && prices.length > 0
   };
 }

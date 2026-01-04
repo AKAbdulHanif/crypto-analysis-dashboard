@@ -76,7 +76,7 @@ export const nansenRouter = router({
                 },
                 order_by: [
                   {
-                    field: 'volume_24h',
+                    field: 'volume',
                     direction: 'DESC'
                   }
                 ]
@@ -181,7 +181,7 @@ export const nansenRouter = router({
             },
             order_by: [
               {
-                field: 'smart_money_holders',
+                field: 'holders_count',
                 direction: 'DESC'
               }
             ]

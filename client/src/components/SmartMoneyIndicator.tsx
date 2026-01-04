@@ -1,4 +1,4 @@
-import { trpc } from '@/lib/trpc';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { TrendingUp, TrendingDown, Activity, Users, Wallet } from 'lucide-react';
@@ -9,10 +9,30 @@ interface SmartMoneyIndicatorProps {
 }
 
 export function SmartMoneyIndicator({ symbols }: SmartMoneyIndicatorProps) {
-  const { data, isLoading, error } = trpc.nansen.getTokenData.useQuery(
-    { symbols },
-    { refetchInterval: 300000 } // Refresh every 5 minutes
-  );
+  const [data, setData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/nansen');
+        const result = await response.json();
+        setData(result);
+        if (!result.success) {
+          setError(new Error(result.error || 'Failed to fetch data'));
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Failed to fetch data'));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchData();
+    const interval = setInterval(fetchData, 300000); // 5 minutes
+    return () => clearInterval(interval);
+  }, []);
 
   if (isLoading) {
     return (

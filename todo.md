@@ -44,3 +44,19 @@
 - [x] Update request body to use correct format (per_page, filters, order_by)
 - [x] Test with correct authentication header (apiKey)
 - [ ] Verify Smart Money Analytics displays data (blocked by insufficient credits)
+
+## Binance API Integration
+- [ ] Add Binance API as fallback for price data
+- [ ] Test Nansen API with new credits
+- [ ] Verify all live data displays correctly
+
+## New Token Additions
+- [ ] Add ALEO, YEE, RAIL, TIBBIR to analysis
+- [ ] Switch to Binance as primary price source
+- [ ] Keep Nansen for smart money analytics only
+- [ ] Update all token lists and mappings
+
+## REST API Implementation
+- [x] Create simple REST endpoints bypassing tRPC
+- [x] Update frontend to use REST API instead of tRPC
+- [x] Test all endpoints and verify data display - WORKING!

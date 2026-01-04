@@ -2,127 +2,111 @@ import axios from 'axios';
 import { publicProcedure, router } from './_core/trpc';
 import { z } from 'zod';
 
-const COINGECKO_API_BASE = 'https://api.coingecko.com/api/v3';
+const CMC_API_BASE = 'https://api.coinmarketcap.com/data-api/v3';
 
-// Map our token symbols to CoinGecko IDs
-const TOKEN_ID_MAP: Record<string, string> = {
+// Map our token symbols to CMC slugs
+const TOKEN_SLUG_MAP: Record<string, string> = {
   'SUI': 'sui',
   'LINK': 'chainlink',
   'APT': 'aptos',
   'SEI': 'sei-network',
   'ASTER': 'astar',
-  'SONIC': 'sonic-sfs',
+  'SONIC': 'sonic',
   'PYTH': 'pyth-network',
   'EIGEN': 'eigenlayer',
   'SYRUP': 'maple',
   'NIL': 'nillion',
   'ALLO': 'allora',
-  'FARTCOIN': 'fartcoin'
+  'FARTCOIN': 'fartcoin',
+  'ALEO': 'aleo',
+  'YEE': 'yee',
+  'RAIL': 'railgun',
+  'TIBBIR': 'tibbir'
 };
-
-interface CoinGeckoPrice {
-  id: string;
-  symbol: string;
-  name: string;
-  current_price: number;
-  market_cap: number;
-  market_cap_rank: number;
-  total_volume: number;
-  price_change_percentage_24h: number;
-  price_change_percentage_7d_in_currency?: number;
-  price_change_percentage_30d_in_currency?: number;
-}
 
 export const cryptoRouter = router({
   getDominance: publicProcedure
     .query(async () => {
       try {
-        // Fetch global crypto data for dominance metrics
-        const globalResponse = await axios.get(
-          `${COINGECKO_API_BASE}/global`,
-          { timeout: 10000 }
-        );
-
-        const globalData = globalResponse.data.data;
-        const marketCapPercentages = globalData.market_cap_percentage;
-
-        // Calculate OTHERS.D (100 - BTC.D - ETH.D)
-        const btcDominance = marketCapPercentages.btc || 0;
-        const ethDominance = marketCapPercentages.eth || 0;
-        const othersDominance = 100 - btcDominance - ethDominance;
-
-        // Fetch USDT and USDC market caps for stablecoin dominance
-        const stablecoinsResponse = await axios.get<CoinGeckoPrice[]>(
-          `${COINGECKO_API_BASE}/coins/markets`,
+        // Fetch top coins for dominance calculation
+        const response = await axios.get(
+          `${CMC_API_BASE}/cryptocurrency/listing`,
           {
             params: {
-              vs_currency: 'usd',
-              ids: 'tether,usd-coin',
-              order: 'market_cap_desc',
-              per_page: 2,
-              page: 1,
-              sparkline: false
+              start: 1,
+              limit: 100,
+              sortBy: 'market_cap',
+              sortType: 'desc',
+              convert: 'USD'
             },
-            timeout: 10000
+            timeout: 15000
           }
         );
 
-        const totalMarketCap = globalData.total_market_cap.usd;
-        const usdtMarketCap = stablecoinsResponse.data.find(c => c.id === 'tether')?.market_cap || 0;
-        const usdcMarketCap = stablecoinsResponse.data.find(c => c.id === 'usd-coin')?.market_cap || 0;
+        const coins = response.data.data.cryptoCurrencyList;
+        
+        // Calculate total market cap
+        const totalMarketCap = coins.reduce((sum: number, coin: any) => {
+          const quote = coin.quotes?.[0] || {};
+          return sum + (quote.marketCap || 0);
+        }, 0);
 
+        // Find BTC, ETH, USDT, USDC
+        const btc = coins.find((c: any) => c.symbol === 'BTC');
+        const eth = coins.find((c: any) => c.symbol === 'ETH');
+        const usdt = coins.find((c: any) => c.symbol === 'USDT');
+        const usdc = coins.find((c: any) => c.symbol === 'USDC');
+
+        const btcMarketCap = btc?.quotes?.[0]?.marketCap || 0;
+        const ethMarketCap = eth?.quotes?.[0]?.marketCap || 0;
+        const usdtMarketCap = usdt?.quotes?.[0]?.marketCap || 0;
+        const usdcMarketCap = usdc?.quotes?.[0]?.marketCap || 0;
+
+        const btcDominance = (btcMarketCap / totalMarketCap) * 100;
+        const ethDominance = (ethMarketCap / totalMarketCap) * 100;
+        const othersDominance = 100 - btcDominance - ethDominance;
         const usdtDominance = (usdtMarketCap / totalMarketCap) * 100;
         const usdcDominance = (usdcMarketCap / totalMarketCap) * 100;
 
-        // Fetch ETHBTC pair data
-        const ethbtcResponse = await axios.get(
-          `${COINGECKO_API_BASE}/simple/price`,
-          {
-            params: {
-              ids: 'ethereum',
-              vs_currencies: 'btc',
-              include_24hr_change: true,
-              include_7d_change: true
-            },
-            timeout: 10000
-          }
-        );
-
-        const ethbtcData = ethbtcResponse.data.ethereum;
+        // Calculate ETHBTC ratio
+        const ethPrice = eth?.quotes?.[0]?.price || 0;
+        const btcPrice = btc?.quotes?.[0]?.price || 0;
+        const ethbtcRatio = ethPrice / btcPrice;
+        const ethbtcChange24h = (eth?.quotes?.[0]?.percentChange24h || 0) - (btc?.quotes?.[0]?.percentChange24h || 0);
 
         return {
           success: true,
           data: {
             btcDominance: {
               value: btcDominance,
-              change24h: 0, // CoinGecko doesn't provide 24h change for dominance
-              trend: 'neutral' as 'up' | 'down' | 'neutral'
+              change24h: 0,
+              trend: 'neutral' as const
             },
             ethDominance: {
               value: ethDominance,
               change24h: 0,
-              trend: 'neutral' as 'up' | 'down' | 'neutral'
+              trend: 'neutral' as const
             },
             othersDominance: {
               value: othersDominance,
               change24h: 0,
-              trend: 'neutral' as 'up' | 'down' | 'neutral'
+              trend: 'neutral' as const
             },
             usdtDominance: {
               value: usdtDominance,
               change24h: 0,
-              trend: 'neutral' as 'up' | 'down' | 'neutral'
+              trend: 'neutral' as const
             },
             usdcDominance: {
               value: usdcDominance,
               change24h: 0,
-              trend: 'neutral' as 'up' | 'down' | 'neutral'
+              trend: 'neutral' as const
             },
             ethbtc: {
-              value: ethbtcData.btc,
-              change24h: ethbtcData.btc_24h_change || 0,
-              change7d: ethbtcData.btc_7d_change || 0,
-              trend: (ethbtcData.btc_24h_change || 0) >= 0 ? 'up' as const : 'down' as const
+              value: ethbtcRatio,
+              change24h: ethbtcChange24h,
+              change7d: 0,
+              trend: ethbtcChange24h >= 0 ? 'up' as const : 'down' as const
             },
             altcoinSeasonSignal: {
               isAltSeason: othersDominance > 40 && btcDominance < 45,
@@ -130,7 +114,7 @@ export const cryptoRouter = router({
               indicators: {
                 btcDominanceFalling: btcDominance < 50,
                 othersDominanceRising: othersDominance > 40,
-                ethbtcRising: (ethbtcData.btc_24h_change || 0) > 0,
+                ethbtcRising: ethbtcChange24h > 0,
                 stablecoinDominanceFalling: (usdtDominance + usdcDominance) < 10
               }
             },
@@ -156,54 +140,57 @@ export const cryptoRouter = router({
     }))
     .query(async ({ input }) => {
       try {
-        const symbolsToFetch = input.symbols || Object.keys(TOKEN_ID_MAP);
-        const coinGeckoIds = symbolsToFetch
-          .map(symbol => TOKEN_ID_MAP[symbol])
-          .filter(Boolean)
-          .join(',');
-
-        const response = await axios.get<CoinGeckoPrice[]>(
-          `${COINGECKO_API_BASE}/coins/markets`,
+        const symbolsToFetch = input.symbols || Object.keys(TOKEN_SLUG_MAP);
+        
+        // Fetch top 500 coins from CoinMarketCap
+        const response = await axios.get(
+          `${CMC_API_BASE}/cryptocurrency/listing`,
           {
             params: {
-              vs_currency: 'usd',
-              ids: coinGeckoIds,
-              order: 'market_cap_desc',
-              per_page: 100,
-              page: 1,
-              sparkline: false,
-              price_change_percentage: '24h,7d,30d'
+              start: 1,
+              limit: 500,
+              sortBy: 'market_cap',
+              sortType: 'desc',
+              convert: 'USD'
             },
-            timeout: 10000
+            timeout: 15000
           }
         );
 
-        // Transform to our format
-        const priceData = response.data.map(coin => {
-          const symbol = Object.keys(TOKEN_ID_MAP).find(
-            key => TOKEN_ID_MAP[key] === coin.id
-          ) || coin.symbol.toUpperCase();
+        const coins = response.data.data.cryptoCurrencyList;
+        const results: any[] = [];
 
-          return {
-            symbol,
-            name: coin.name,
-            price: coin.current_price,
-            marketCap: coin.market_cap,
-            volume24h: coin.total_volume,
-            change24h: coin.price_change_percentage_24h || 0,
-            change7d: coin.price_change_percentage_7d_in_currency || 0,
-            change30d: coin.price_change_percentage_30d_in_currency || 0,
-            lastUpdated: new Date().toISOString()
-          };
+        symbolsToFetch.forEach(symbol => {
+          const slug = TOKEN_SLUG_MAP[symbol];
+          if (!slug) return;
+
+          const coin = coins.find((c: any) => 
+            c.slug === slug || c.symbol === symbol
+          );
+
+          if (coin) {
+            const quote = coin.quotes?.[0] || {};
+            results.push({
+              symbol,
+              name: coin.name,
+              price: quote.price || 0,
+              marketCap: quote.marketCap || 0,
+              volume24h: quote.volume24h || 0,
+              change24h: quote.percentChange24h || 0,
+              change7d: quote.percentChange7d || 0,
+              change30d: quote.percentChange30d || 0,
+              lastUpdated: new Date().toISOString()
+            });
+          }
         });
 
         return {
           success: true,
-          data: priceData,
+          data: results,
           timestamp: new Date().toISOString()
         };
       } catch (error) {
-        console.error('Error fetching crypto prices:', error);
+        console.error('Error fetching CoinMarketCap prices:', error);
         return {
           success: false,
           data: [],
@@ -219,47 +206,51 @@ export const cryptoRouter = router({
     }))
     .query(async ({ input }) => {
       try {
-        const coinGeckoId = TOKEN_ID_MAP[input.symbol];
-        if (!coinGeckoId) {
+        const coinSlug = TOKEN_SLUG_MAP[input.symbol];
+        if (!coinSlug) {
           throw new Error(`Token ${input.symbol} not found`);
         }
 
+        // CoinMarketCap public API doesn't have detailed endpoint
+        // Return basic info from listing
         const response = await axios.get(
-          `${COINGECKO_API_BASE}/coins/${coinGeckoId}`,
+          `${CMC_API_BASE}/cryptocurrency/listing`,
           {
             params: {
-              localization: false,
-              tickers: false,
-              market_data: true,
-              community_data: false,
-              developer_data: false
+              start: 1,
+              limit: 500,
+              sortBy: 'market_cap',
+              sortType: 'desc',
+              convert: 'USD'
             },
-            timeout: 10000
+            timeout: 15000
           }
         );
 
-        const coin = response.data;
-        const marketData = coin.market_data;
+        const coins = response.data.data.cryptoCurrencyList;
+        const coin = coins.find((c: any) => c.slug === coinSlug || c.symbol === input.symbol);
+
+        if (!coin) {
+          throw new Error(`Token ${input.symbol} not found in listings`);
+        }
+
+        const quote = coin.quotes?.[0] || {};
 
         return {
           success: true,
           data: {
             symbol: input.symbol,
             name: coin.name,
-            price: marketData.current_price.usd,
-            marketCap: marketData.market_cap.usd,
-            volume24h: marketData.total_volume.usd,
-            circulatingSupply: marketData.circulating_supply,
-            totalSupply: marketData.total_supply,
-            maxSupply: marketData.max_supply,
-            change24h: marketData.price_change_percentage_24h || 0,
-            change7d: marketData.price_change_percentage_7d || 0,
-            change30d: marketData.price_change_percentage_30d || 0,
-            ath: marketData.ath.usd,
-            athDate: marketData.ath_date.usd,
-            atl: marketData.atl.usd,
-            atlDate: marketData.atl_date.usd,
-            lastUpdated: coin.last_updated
+            price: quote.price || 0,
+            marketCap: quote.marketCap || 0,
+            volume24h: quote.volume24h || 0,
+            circulatingSupply: coin.circulatingSupply || 0,
+            totalSupply: coin.totalSupply || 0,
+            maxSupply: coin.maxSupply || 0,
+            change24h: quote.percentChange24h || 0,
+            change7d: quote.percentChange7d || 0,
+            change30d: quote.percentChange30d || 0,
+            lastUpdated: new Date().toISOString()
           }
         };
       } catch (error) {

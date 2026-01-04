@@ -1,20 +1,33 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { TrendingUp, TrendingDown, Activity, AlertCircle } from 'lucide-react';
-import { trpc } from '@/lib/trpc';
 import { useEffect, useState } from 'react';
 
 export function MarketDominance() {
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
-  const { data, isLoading, error, refetch } = trpc.crypto.getDominance.useQuery(
-    undefined,
-    {
-      refetchInterval: 5 * 60 * 1000, // 5 minutes
-      refetchOnWindowFocus: true,
-      staleTime: 2.5 * 60 * 1000
-    }
-  );
+  const [data, setData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/dominance');
+        const result = await response.json();
+        setData(result);
+        setError(result.success ? null : result.error);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchData();
+    const interval = setInterval(fetchData, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (data?.success) {
