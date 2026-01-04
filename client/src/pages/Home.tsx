@@ -1,6 +1,6 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { TrendingUp, AlertTriangle, CheckCircle2, Zap } from "lucide-react";
 import { LivePriceTicker } from "@/components/LivePriceTicker";
 import { SmartMoneyIndicator } from "@/components/SmartMoneyIndicator";
 import { UnlockCalendar } from "@/components/UnlockCalendar";
@@ -13,114 +13,131 @@ interface TokenMetrics {
   price: string;
   marketCap: string;
   change24h: number;
+  change7d: number;
   volume: string;
-  recommendation: 'strong_buy' | 'buy' | 'hold' | 'avoid';
+  recommendation: 'very_strong_buy' | 'strong_buy' | 'speculative_buy' | 'hold' | 'avoid';
   score: number;
   tier: 'tier_1' | 'tier_2' | 'tier_3' | 'tier_4';
   allocation?: string;
+  isNew?: boolean;
 }
 
 const tokens: TokenMetrics[] = [
   {
     name: "Sui Network",
     symbol: "SUI",
-    price: "$1.67",
-    marketCap: "$6.35B",
-    change24h: 2.32,
-    volume: "$1.58B",
-    recommendation: 'strong_buy',
-    score: 8.5,
+    price: "$1.70",
+    marketCap: "$6.47B",
+    change24h: 3.01,
+    change7d: 18.37,
+    volume: "$767M",
+    recommendation: 'very_strong_buy',
+    score: 9.0,
     tier: 'tier_1',
-    allocation: "$25,000 (50%)"
+    allocation: "$22,500 (45%)"
   },
   {
     name: "Chainlink",
     symbol: "LINK",
-    price: "$13.31",
-    marketCap: "$9.41B",
-    change24h: -0.31,
-    volume: "$719.73M",
+    price: "$13.38",
+    marketCap: "$9.47B",
+    change24h: 1.57,
+    change7d: 8.29,
+    volume: "$574M",
     recommendation: 'strong_buy',
-    score: 8.2,
+    score: 8.5,
     tier: 'tier_1',
-    allocation: "$15,000 (30%)"
-  },
-  {
-    name: "Aptos",
-    symbol: "APT",
-    price: "$1.91",
-    marketCap: "$1.43B",
-    change24h: 1.74,
-    volume: "$105.7M",
-    recommendation: 'buy',
-    score: 6.5,
-    tier: 'tier_2',
-    allocation: "$5,000 (10%)"
-  },
-  {
-    name: "Sei Network",
-    symbol: "SEI",
-    price: "$0.1221",
-    marketCap: "$794M",
-    change24h: -0.57,
-    volume: "$114.65M",
-    recommendation: 'hold',
-    score: 5.5,
-    tier: 'tier_2'
-  },
-  {
-    name: "Aster",
-    symbol: "ASTER",
-    price: "$0.71",
-    marketCap: "$1.77B",
-    change24h: 0.13,
-    volume: "$146.06M",
-    recommendation: 'hold',
-    score: 5.8,
-    tier: 'tier_2'
+    allocation: "$12,500 (25%)"
   },
   {
     name: "Sonic",
     symbol: "SONIC",
-    price: "$0.0810",
-    marketCap: "$234.68M",
-    change24h: 0.58,
-    volume: "$27.02M",
+    price: "$0.0908",
+    marketCap: "$262M",
+    change24h: 10.77,
+    change7d: 17.05,
+    volume: "$54M",
+    recommendation: 'speculative_buy',
+    score: 7.0,
+    tier: 'tier_2',
+    allocation: "$5,000 (10%)",
+    isNew: true
+  },
+  {
+    name: "Aptos",
+    symbol: "APT",
+    price: "$1.92",
+    marketCap: "$1.44B",
+    change24h: 0.59,
+    change7d: 12.22,
+    volume: "$75M",
     recommendation: 'hold',
-    score: 4.5,
+    score: 6.5,
+    tier: 'tier_2',
+    allocation: "$3,000 (6%)"
+  },
+  {
+    name: "Maple Finance",
+    symbol: "SYRUP",
+    price: "$0.3617",
+    marketCap: "$416M",
+    change24h: 2.88,
+    change7d: 12.18,
+    volume: "$16M",
+    recommendation: 'speculative_buy',
+    score: 6.8,
+    tier: 'tier_2',
+    allocation: "$2,000 (4%)",
+    isNew: true
+  },
+  {
+    name: "Astar",
+    symbol: "ASTER",
+    price: "$0.7753",
+    marketCap: "$1.93B",
+    change24h: 3.98,
+    change7d: 9.08,
+    volume: "$187M",
+    recommendation: 'hold',
+    score: 6.2,
+    tier: 'tier_3',
+    allocation: "$2,500 (5%)",
+    isNew: true
+  },
+  {
+    name: "Sei Network",
+    symbol: "SEI",
+    price: "$0.1234",
+    marketCap: "$801M",
+    change24h: 2.06,
+    change7d: 8.47,
+    volume: "$59M",
+    recommendation: 'hold',
+    score: 5.5,
     tier: 'tier_3'
   },
   {
     name: "Pyth Network",
     symbol: "PYTH",
-    price: "$0.0638",
-    marketCap: "$875M",
-    change24h: 2.36,
-    volume: "$14.3M",
+    price: "$0.0674",
+    marketCap: "$387M",
+    change24h: 6.09,
+    change7d: 11.33,
+    volume: "$21M",
     recommendation: 'hold',
-    score: 4.8,
+    score: 5.2,
     tier: 'tier_3'
   },
   {
     name: "EigenLayer",
     symbol: "EIGEN",
-    price: "$0.38",
-    marketCap: "$450M",
-    change24h: 9.72,
-    volume: "$52.3M",
+    price: "$0.4207",
+    marketCap: "$227M",
+    change24h: 1.93,
+    change7d: 8.97,
+    volume: "$37M",
     recommendation: 'avoid',
-    score: 3.5,
-    tier: 'tier_3'
-  },
-  {
-    name: "Maple Finance",
-    symbol: "SYRUP",
-    price: "$0.3547",
-    marketCap: "$404M",
-    change24h: -4.03,
-    volume: "$22.29M",
-    recommendation: 'avoid',
-    score: 4.0,
+    score: 4.5,
     tier: 'tier_4'
   },
   {
@@ -128,348 +145,378 @@ const tokens: TokenMetrics[] = [
     symbol: "NIL",
     price: "$0.0765",
     marketCap: "$22.4M",
-    change24h: -2.24,
-    volume: "$6.23M",
+    change24h: -2.15,
+    change7d: -8.32,
+    volume: "$3.2M",
     recommendation: 'avoid',
-    score: 3.0,
+    score: 2.5,
     tier: 'tier_4'
   },
   {
     name: "Allora",
     symbol: "ALLO",
     price: "$0.1213",
-    marketCap: "$24.4M",
-    change24h: 3.09,
-    volume: "$20.21M",
+    marketCap: "$45.6M",
+    change24h: 1.23,
+    change7d: -3.45,
+    volume: "$5.8M",
     recommendation: 'avoid',
-    score: 4.0,
+    score: 3.0,
     tier: 'tier_4'
   },
   {
     name: "Fartcoin",
     symbol: "FARTCOIN",
-    price: "$0.334",
-    marketCap: "Micro-cap",
-    change24h: 0,
-    volume: "$87.36M",
+    price: "$0.3470",
+    marketCap: "Unknown",
+    change24h: 5.41,
+    change7d: 0,
+    volume: "Unknown",
     recommendation: 'avoid',
-    score: 1.5,
+    score: 1.0,
     tier: 'tier_4'
   }
 ];
 
-const recommendationConfig = {
-  strong_buy: { label: 'Strong Buy', color: 'bg-green-100 text-green-800', icon: CheckCircle2 },
-  buy: { label: 'Buy', color: 'bg-blue-100 text-blue-800', icon: CheckCircle2 },
-  hold: { label: 'Hold', color: 'bg-yellow-100 text-yellow-800', icon: TrendingUp },
-  avoid: { label: 'Avoid', color: 'bg-red-100 text-red-800', icon: AlertTriangle }
-};
-
-const tierConfig = {
-  tier_1: { label: 'Tier 1: Established', color: 'border-green-500 bg-green-50', description: 'Institutional-grade, high conviction' },
-  tier_2: { label: 'Tier 2: L1 Blockchains', color: 'border-blue-500 bg-blue-50', description: 'Moderate conviction, diversification' },
-  tier_3: { label: 'Tier 3: Emerging', color: 'border-yellow-500 bg-yellow-50', description: 'Speculative, requires monitoring' },
-  tier_4: { label: 'Tier 4: Avoid', color: 'border-red-500 bg-red-50', description: 'High risk, unfavorable tokenomics' }
-};
+const TRACKED_SYMBOLS = ['SUI', 'LINK', 'APT', 'SEI', 'ASTER', 'SONIC', 'PYTH', 'EIGEN', 'SYRUP', 'FARTCOIN', 'ALEO', 'TIBBIR'];
 
 export default function Home() {
-  const allSymbols = tokens.map(t => t.symbol);
+  const getRecommendationBadge = (recommendation: string) => {
+    const badges = {
+      very_strong_buy: { label: 'VERY STRONG BUY', className: 'bg-emerald-600 text-white hover:bg-emerald-700' },
+      strong_buy: { label: 'STRONG BUY', className: 'bg-green-600 text-white hover:bg-green-700' },
+      speculative_buy: { label: 'SPECULATIVE BUY', className: 'bg-amber-500 text-white hover:bg-amber-600' },
+      buy: { label: 'BUY', className: 'bg-blue-600 text-white hover:bg-blue-700' },
+      hold: { label: 'HOLD', className: 'bg-slate-500 text-white hover:bg-slate-600' },
+      avoid: { label: 'AVOID', className: 'bg-red-600 text-white hover:bg-red-700' }
+    };
+    const badge = badges[recommendation as keyof typeof badges] || badges.hold;
+    return <Badge className={badge.className}>{badge.label}</Badge>;
+  };
+
+  const getTierBadge = (tier: string) => {
+    const tiers = {
+      tier_1: { label: 'Tier 1: Infrastructure', className: 'bg-purple-100 text-purple-800 border-purple-300' },
+      tier_2: { label: 'Tier 2: Growth', className: 'bg-blue-100 text-blue-800 border-blue-300' },
+      tier_3: { label: 'Tier 3: Speculative', className: 'bg-amber-100 text-amber-800 border-amber-300' },
+      tier_4: { label: 'Tier 4: Avoid', className: 'bg-red-100 text-red-800 border-red-300' }
+    };
+    const tierBadge = tiers[tier as keyof typeof tiers] || tiers.tier_3;
+    return <Badge variant="outline" className={tierBadge.className}>{tierBadge.label}</Badge>;
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Header */}
-      <header className="border-b border-slate-200 bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">Crypto Market Analysis</h1>
-          <p className="text-lg text-slate-600">January 4, 2026 - Comprehensive Token Evaluation & Allocation Strategy</p>
+      <header className="bg-white border-b border-slate-200 shadow-sm">
+        <div className="container py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold text-slate-900">Crypto Market Analysis</h1>
+              <p className="text-slate-600 mt-1">
+                January 4, 2026 - <span className="font-semibold text-emerald-600">REVISED</span> Token Evaluation & Allocation Strategy
+              </p>
+            </div>
+            <div className="text-right">
+              <Badge className="bg-emerald-100 text-emerald-800 border-emerald-300 text-sm px-3 py-1">
+                <Zap className="w-3 h-3 mr-1 inline" />
+                Early Altcoin Season Signals
+              </Badge>
+              <p className="text-xs text-slate-500 mt-1">Altcoin Season Index: 57/100</p>
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
+      <main className="container py-8 space-y-8">
         {/* Live Price Ticker */}
-        <section className="mb-12">
-          <LivePriceTicker symbols={allSymbols} />
-        </section>
+        <LivePriceTicker symbols={TRACKED_SYMBOLS} />
 
-        {/* Smart Money Analytics from Nansen - Temporarily disabled due to API issues */}
-        {/* <section className="mb-12">
-          <SmartMoneyIndicator symbols={['SUI', 'LINK', 'APT', 'PYTH', 'EIGEN']} />
-        </section> */}
+        {/* Revision Notice */}
+        <Card className="bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-200 p-6">
+          <div className="flex items-start gap-4">
+            <div className="bg-emerald-100 p-3 rounded-lg">
+              <TrendingUp className="w-6 h-6 text-emerald-700" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-bold text-slate-900 mb-2">🔄 ALLOCATION REVISED - January 4, 2026</h3>
+              <div className="text-sm text-slate-700 space-y-2">
+                <p className="font-semibold">Key Changes Based on Market Momentum:</p>
+                <ul className="list-disc list-inside space-y-1 ml-2">
+                  <li><strong>SONIC added</strong> at 10% ($5,000) - Explosive +17% weekly momentum</li>
+                  <li><strong>SYRUP added</strong> at 4% ($2,000) - DeFi recovery play (+42.77% monthly)</li>
+                  <li><strong>ASTER added</strong> at 5% ($2,500) - Volume surge to $187M</li>
+                  <li><strong>SUI reduced</strong> to 45% ($22,500) from 50% - Still #1 conviction</li>
+                  <li><strong>LINK reduced</strong> to 25% ($12,500) from 30% - Maintained strong conviction</li>
+                  <li><strong>APT reduced</strong> to 6% ($3,000) from 10% - Jan 11 unlock risk</li>
+                  <li><strong>Cash reduced</strong> to 5% ($2,500) from 10% - Deploy in favorable conditions</li>
+                </ul>
+                <p className="text-emerald-700 font-semibold mt-3">
+                  ✅ Portfolio positioned for early altcoin season with 6 active positions + cash reserve
+                </p>
+              </div>
+            </div>
+          </div>
+        </Card>
 
-        {/* Market Dominance Tracker - Temporarily disabled */}
-        {/* <section className="mb-12">
-          <MarketDominance />
-        </section> */}
+        {/* Uncomment when Nansen API is working */}
+        {/* <SmartMoneyIndicator /> */}
+        
+        {/* Uncomment when Market Dominance API is working */}
+        {/* <MarketDominance /> */}
 
         {/* Executive Summary */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">Executive Summary</h2>
-          <Card className="border-l-4 border-l-blue-500 bg-white">
-            <CardHeader>
-              <CardTitle>High-Conviction Portfolio Allocation for $50,000</CardTitle>
-              <CardDescription>Focused January accumulation strategy with only 3 positions + cash reserve</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200">
-                  <p className="text-sm font-semibold text-green-700 mb-2">SUI (PRIMARY)</p>
-                  <p className="text-3xl font-bold text-green-900">$25,000</p>
-                  <p className="text-sm text-green-700 mt-2">50% - Strongest conviction</p>
+        <section>
+          <h2 className="text-3xl font-bold text-slate-900 mb-6">Executive Summary</h2>
+          
+          <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 p-8">
+            <h3 className="text-2xl font-bold text-slate-900 mb-2">REVISED Portfolio Allocation for $50,000</h3>
+            <p className="text-slate-600 mb-6">
+              Increased from 3 to 6 active positions to capitalize on early altcoin season signals
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* SUI */}
+              <Card className="bg-gradient-to-br from-emerald-50 to-green-50 border-emerald-200 p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-bold text-emerald-900">SUI (PRIMARY)</h4>
+                  {getTierBadge('tier_1')}
                 </div>
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
-                  <p className="text-sm font-semibold text-blue-700 mb-2">LINK (SECONDARY)</p>
-                  <p className="text-3xl font-bold text-blue-900">$15,000</p>
-                  <p className="text-sm text-blue-700 mt-2">30% - Institutional oracle</p>
+                <div className="text-4xl font-bold text-emerald-700 mb-2">$22,500</div>
+                <p className="text-sm text-emerald-800 font-semibold mb-2">45% - Strongest conviction</p>
+                <p className="text-xs text-slate-600">Previous: $25,000 (50%)</p>
+                <Badge className="mt-2 bg-emerald-600 text-white">VERY STRONG BUY</Badge>
+              </Card>
+
+              {/* LINK */}
+              <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-bold text-blue-900">LINK (SECONDARY)</h4>
+                  {getTierBadge('tier_1')}
                 </div>
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
-                  <p className="text-sm font-semibold text-purple-700 mb-2">APT (DIVERSIFIER)</p>
-                  <p className="text-3xl font-bold text-purple-900">$5,000</p>
-                  <p className="text-sm text-purple-700 mt-2">10% - Post-unlock play</p>
+                <div className="text-4xl font-bold text-blue-700 mb-2">$12,500</div>
+                <p className="text-sm text-blue-800 font-semibold mb-2">25% - Institutional oracle</p>
+                <p className="text-xs text-slate-600">Previous: $15,000 (30%)</p>
+                <Badge className="mt-2 bg-blue-600 text-white">STRONG BUY</Badge>
+              </Card>
+
+              {/* SONIC */}
+              <Card className="bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200 p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-bold text-amber-900 flex items-center gap-2">
+                    SONIC (MOMENTUM)
+                    <Badge className="bg-red-500 text-white text-xs">NEW</Badge>
+                  </h4>
+                  {getTierBadge('tier_2')}
                 </div>
-                <div className="bg-gradient-to-br from-slate-50 to-slate-100 p-6 rounded-lg border border-slate-200">
-                  <p className="text-sm font-semibold text-slate-700 mb-2">CASH RESERVE</p>
-                  <p className="text-3xl font-bold text-slate-900">$5,000</p>
-                  <p className="text-sm text-slate-700 mt-2">10% - Risk management</p>
+                <div className="text-4xl font-bold text-amber-700 mb-2">$5,000</div>
+                <p className="text-sm text-amber-800 font-semibold mb-2">10% - Explosive momentum</p>
+                <p className="text-xs text-slate-600">+17% weekly, +10.77% daily</p>
+                <Badge className="mt-2 bg-amber-500 text-white">SPECULATIVE BUY</Badge>
+              </Card>
+
+              {/* APT */}
+              <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200 p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-bold text-purple-900">APT (WATCH)</h4>
+                  {getTierBadge('tier_2')}
                 </div>
-              </div>
-            </CardContent>
+                <div className="text-4xl font-bold text-purple-700 mb-2">$3,000</div>
+                <p className="text-sm text-purple-800 font-semibold mb-2">6% - Post-unlock play</p>
+                <p className="text-xs text-slate-600">Previous: $5,000 (10%)</p>
+                <Badge className="mt-2 bg-slate-500 text-white">HOLD</Badge>
+              </Card>
+
+              {/* SYRUP */}
+              <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-200 p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-bold text-teal-900 flex items-center gap-2">
+                    SYRUP (DeFi)
+                    <Badge className="bg-red-500 text-white text-xs">NEW</Badge>
+                  </h4>
+                  {getTierBadge('tier_2')}
+                </div>
+                <div className="text-4xl font-bold text-teal-700 mb-2">$2,000</div>
+                <p className="text-sm text-teal-800 font-semibold mb-2">4% - DeFi recovery</p>
+                <p className="text-xs text-slate-600">+42.77% monthly performance</p>
+                <Badge className="mt-2 bg-amber-500 text-white">SPECULATIVE BUY</Badge>
+              </Card>
+
+              {/* ASTER */}
+              <Card className="bg-gradient-to-br from-violet-50 to-purple-50 border-violet-200 p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-bold text-violet-900 flex items-center gap-2">
+                    ASTER (DOT)
+                    <Badge className="bg-red-500 text-white text-xs">NEW</Badge>
+                  </h4>
+                  {getTierBadge('tier_3')}
+                </div>
+                <div className="text-4xl font-bold text-violet-700 mb-2">$2,500</div>
+                <p className="text-sm text-violet-800 font-semibold mb-2">5% - Ecosystem play</p>
+                <p className="text-xs text-slate-600">Volume surge to $187M</p>
+                <Badge className="mt-2 bg-slate-500 text-white">HOLD</Badge>
+              </Card>
+
+              {/* CASH RESERVE */}
+              <Card className="bg-gradient-to-br from-slate-50 to-gray-50 border-slate-300 p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-bold text-slate-900">CASH RESERVE</h4>
+                </div>
+                <div className="text-4xl font-bold text-slate-700 mb-2">$2,500</div>
+                <p className="text-sm text-slate-700 font-semibold mb-2">5% - Risk management</p>
+                <p className="text-xs text-slate-600">Previous: $5,000 (10%)</p>
+              </Card>
+            </div>
+
+            <div className="mt-6 p-4 bg-white rounded-lg border border-blue-200">
+              <p className="text-sm text-slate-700">
+                <strong>Strategy Rationale:</strong> Early altcoin season signals (Altcoin Season Index 57/100, BTC dominance declining to 59.43%) justify increased alt exposure and diversification into momentum plays while maintaining core SUI+LINK positions.
+              </p>
+            </div>
           </Card>
         </section>
 
-        {/* Trading Levels - NEW */}
-        <section className="mb-12">
-          <TradingLevels />
-        </section>
+        {/* Entry & Exit Strategy */}
+        <TradingLevels />
 
-        {/* Unlock Calendar - NEW */}
-        <section className="mb-12">
-          <UnlockCalendar />
-        </section>
+        {/* Unlock Calendar */}
+        <UnlockCalendar />
 
-        {/* Token Analysis Grid */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">12-Token Analysis</h2>
-          <p className="text-slate-600 mb-6">Comprehensive evaluation of all tokens analyzed. Tier 1 tokens are high-conviction positions recommended for January accumulation.</p>
+        {/* 12-Token Analysis Grid */}
+        <section>
+          <h2 className="text-3xl font-bold text-slate-900 mb-6">12-Token Analysis Grid</h2>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tokens.map((token) => {
-              const config = recommendationConfig[token.recommendation];
-              const tierInfo = tierConfig[token.tier];
-              const Icon = config.icon;
-              return (
-                <Card key={token.symbol} className={`hover:shadow-lg transition-shadow border-l-4 ${tierInfo.color}`}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <CardTitle className="text-lg">{token.name}</CardTitle>
-                        <CardDescription className="text-xs">{tierInfo.label}</CardDescription>
-                      </div>
-                      <Badge className={`${config.color} border-0`}>
-                        <Icon className="w-3 h-3 mr-1" />
-                        {config.label}
-                      </Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-xs text-slate-500 font-semibold mb-1">PRICE</p>
-                          <p className="text-lg font-bold text-slate-900">{token.price}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-slate-500 font-semibold mb-1">24H CHANGE</p>
-                          <p className={`text-lg font-bold ${token.change24h >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                            {token.change24h >= 0 ? '+' : ''}{token.change24h.toFixed(2)}%
-                          </p>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-200">
-                        <div>
-                          <p className="text-xs text-slate-500 font-semibold mb-1">MARKET CAP</p>
-                          <p className="text-sm font-semibold text-slate-700">{token.marketCap}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-slate-500 font-semibold mb-1">24H VOLUME</p>
-                          <p className="text-sm font-semibold text-slate-700">{token.volume}</p>
-                        </div>
-                      </div>
-                      {token.allocation && (
-                        <div className="pt-2 border-t border-slate-200 bg-slate-50 p-2 rounded">
-                          <p className="text-xs text-slate-600 font-semibold">RECOMMENDED ALLOCATION</p>
-                          <p className="text-sm font-bold text-slate-900">{token.allocation}</p>
-                        </div>
+            {tokens.map((token) => (
+              <Card 
+                key={token.symbol}
+                className={`p-6 hover:shadow-lg transition-shadow ${
+                  token.recommendation === 'very_strong_buy' ? 'border-emerald-300 bg-emerald-50/50' :
+                  token.recommendation === 'strong_buy' ? 'border-green-300 bg-green-50/50' :
+                  token.recommendation === 'speculative_buy' ? 'border-amber-300 bg-amber-50/50' :
+                  token.recommendation === 'hold' ? 'border-slate-300 bg-slate-50/50' :
+                  'border-red-300 bg-red-50/50'
+                }`}
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-lg font-bold text-slate-900">{token.name}</h3>
+                      {token.isNew && (
+                        <Badge className="bg-red-500 text-white text-xs">NEW</Badge>
                       )}
-                      <div className="pt-2 border-t border-slate-200">
-                        <div className="flex items-center justify-between">
-                          <p className="text-xs text-slate-500 font-semibold">ANALYSIS SCORE</p>
-                          <div className="flex items-center gap-2">
-                            <div className="w-24 h-2 bg-slate-200 rounded-full overflow-hidden">
-                              <div 
-                                className={`h-full ${
-                                  token.score >= 7 ? 'bg-green-500' : 
-                                  token.score >= 5 ? 'bg-yellow-500' : 
-                                  'bg-red-500'
-                                }`}
-                                style={{ width: `${(token.score / 10) * 100}%` }}
-                              />
-                            </div>
-                            <span className="text-sm font-bold text-slate-900">{token.score}/10</span>
-                          </div>
-                        </div>
-                      </div>
                     </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Key Findings */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">Why This Allocation?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="border-l-4 border-l-green-500">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-green-600" />
-                  SUI: Strongest Conviction (50%)
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-slate-600 space-y-2">
-                <p>Long/Short ratio 1.88+ (extremely bullish institutional backing). $1.40B futures volume with healthy liquidity. 7-day +15.10% uptrend with mature tokenomics (37.9% circulating). Recent $60M token unlock absorbed well, indicating market strength.</p>
-              </CardContent>
-            </Card>
-            <Card className="border-l-4 border-l-blue-500">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-blue-600" />
-                  LINK: Institutional Oracle (30%)
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-slate-600 space-y-2">
-                <p>$9.41B market cap with $719.73M daily volume (highest quality liquidity). Long/Short 1.9753 shows strong institutional conviction. 30-day -6.65% creates accumulation opportunity. 70.8% circulating supply reduces vesting risk.</p>
-              </CardContent>
-            </Card>
-            <Card className="border-l-4 border-l-purple-500">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-purple-600" />
-                  APT: Post-Unlock Play (10%)
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-slate-600 space-y-2">
-                <p>Jan 11 unlock (7 days) creates timing opportunity. If market absorbs well, significant upside potential. Move-based L1 provides diversification vs SUI. Smaller allocation manages unlock volatility risk.</p>
-              </CardContent>
-            </Card>
-            <Card className="border-l-4 border-l-slate-500">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-slate-600" />
-                  Cash Reserve: Risk Management (10%)
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-slate-600 space-y-2">
-                <p>Dry powder for unexpected dips or better entry points. Flexibility to rebalance or capture weakness. January volatility may create superior opportunities. Protects against downside scenarios.</p>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
-        {/* Macro Context */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">Market Context</h2>
-          <Card>
-            <CardHeader>
-              <CardTitle>January 2026 Crypto Environment</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                    Positive Factors
-                  </h3>
-                  <ul className="space-y-2 text-sm text-slate-600">
-                    <li>• Bitcoin consolidating near $90K with institutional support</li>
-                    <li>• Grayscale: "Dawn of the Institutional Era"</li>
-                    <li>• Altcoin Season Index rising</li>
-                    <li>• L1 blockchain season potentially beginning</li>
-                    <li>• Regulatory clarity improving</li>
-                  </ul>
+                    <p className="text-sm text-slate-600 font-mono">{token.symbol}</p>
+                  </div>
+                  {getTierBadge(token.tier)}
                 </div>
+
+                <div className="space-y-3 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-600">Price</span>
+                    <span className="text-lg font-bold text-slate-900">{token.price}</span>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-600">24h Change</span>
+                    <span className={`text-sm font-semibold ${token.change24h >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {token.change24h >= 0 ? '+' : ''}{token.change24h.toFixed(2)}%
+                    </span>
+                  </div>
+
+                  {token.change7d !== undefined && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-600">7d Change</span>
+                      <span className={`text-sm font-semibold ${token.change7d >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                        {token.change7d >= 0 ? '+' : ''}{token.change7d.toFixed(2)}%
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-600">Volume 24h</span>
+                    <span className="text-sm font-semibold text-slate-900">{token.volume}</span>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-600">Market Cap</span>
+                    <span className="text-sm font-semibold text-slate-900">{token.marketCap}</span>
+                  </div>
+
+                  {token.allocation && (
+                    <div className="flex justify-between items-center pt-2 border-t border-slate-200">
+                      <span className="text-sm font-semibold text-slate-700">Allocation</span>
+                      <span className="text-sm font-bold text-blue-700">{token.allocation}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between pt-3 border-t border-slate-200">
+                  {getRecommendationBadge(token.recommendation)}
+                  <div className="flex items-center gap-1">
+                    <span className="text-xs text-slate-500">Score:</span>
+                    <span className="text-sm font-bold text-slate-900">{token.score}/10</span>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* Key Insights */}
+        <section>
+          <h2 className="text-3xl font-bold text-slate-900 mb-6">Key Insights</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-green-600 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                    Risk Factors
-                  </h3>
-                  <ul className="space-y-2 text-sm text-slate-600">
-                    <li>• Early crypto winter signals (less chaotic)</li>
-                    <li>• Market favoring projects with real utility</li>
-                    <li>• Most altcoins may never recover</li>
-                    <li>• Volatility remains elevated</li>
-                    <li>• Speculation declining (quality matters more)</li>
-                  </ul>
+                  <h3 className="font-bold text-slate-900 mb-2">Strong Momentum</h3>
+                  <p className="text-sm text-slate-700">
+                    Broad altcoin strength with 8-12% weekly gains. SUI leading at +18.37%, SONIC explosive at +17.05%.
+                  </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </section>
+            </Card>
 
-        {/* January Execution Strategy */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">January Execution Strategy</h2>
-          <div className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Week 1 (Jan 4-10): Accumulation Phase</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-slate-600 space-y-2">
-                <p><strong>SUI:</strong> Accumulate 60% of position ($15,000) at current levels</p>
-                <p><strong>LINK:</strong> Accumulate 50% of position ($7,500) at current levels</p>
-                <p><strong>APT:</strong> Wait for Jan 11 unlock event</p>
-              </CardContent>
+            <Card className="p-6 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="w-6 h-6 text-amber-600 mt-1" />
+                <div>
+                  <h3 className="font-bold text-slate-900 mb-2">Unlock Risks</h3>
+                  <p className="text-sm text-slate-700">
+                    APT (Jan 11), NILLION (Jan 19), ALLORA (Jan 25), SEI (Feb 1) - Monitor for dip opportunities.
+                  </p>
+                </div>
+              </div>
             </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Week 2 (Jan 11-17): Post-Unlock Assessment</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-slate-600 space-y-2">
-                <p><strong>APT:</strong> Monitor Jan 11 unlock reaction, accumulate if market absorbs well</p>
-                <p><strong>SUI/LINK:</strong> Continue accumulation if momentum continues</p>
-                <p><strong>Cash:</strong> Hold 50% for potential dips</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Week 3-4 (Jan 18-31): Final Positioning</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-slate-600 space-y-2">
-                <p><strong>NILLION:</strong> Monitor Jan 19 unlock (watch for cascade selling)</p>
-                <p><strong>SUI/LINK:</strong> Complete positions if technicals remain bullish</p>
-                <p><strong>Rebalance:</strong> Adjust based on market reaction to unlocks</p>
-              </CardContent>
+
+            <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+              <div className="flex items-start gap-3">
+                <TrendingUp className="w-6 h-6 text-blue-600 mt-1" />
+                <div>
+                  <h3 className="font-bold text-slate-900 mb-2">Altcoin Season</h3>
+                  <p className="text-sm text-slate-700">
+                    Index at 57/100 (threshold 75). BTC dominance 59.43% declining. Early signals aligning for Q1 2026 rally.
+                  </p>
+                </div>
+              </div>
             </Card>
           </div>
         </section>
 
-        {/* Disclaimer */}
-        <section className="mb-12 bg-slate-100 p-6 rounded-lg border border-slate-200">
-          <h3 className="font-semibold text-slate-900 mb-3">Disclaimer</h3>
-          <p className="text-sm text-slate-600">
-            This analysis is provided for informational purposes only and should not be considered financial advice. Cryptocurrency markets are highly volatile and carry significant risk. Past performance does not guarantee future results. Always conduct your own research and consult with a qualified financial advisor before making investment decisions. The allocation recommendations are based on current market data and technical analysis and may change as market conditions evolve.
+        {/* Footer */}
+        <footer className="text-center text-sm text-slate-500 py-8 border-t border-slate-200">
+          <p>
+            This analysis is for informational purposes only and does not constitute financial advice.
+            Always conduct your own research and consult with a qualified financial advisor.
           </p>
-        </section>
+          <p className="mt-2">
+            Data sources: CoinMarketCap, Coinglass, DEX Screener, DropsTab | Last updated: January 4, 2026
+          </p>
+        </footer>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-slate-900 text-slate-300 py-8 mt-12">
-        <div className="container mx-auto px-4 text-center text-sm">
-          <p>Crypto Market Analysis | January 4, 2026 | Prepared by Manus AI</p>
-          <p className="mt-2">Data sourced from CoinMarketCap, CoinGecko, Coinglass, DEX Screener, and DropsTab</p>
-        </div>
-      </footer>
     </div>
   );
 }

@@ -68,3 +68,11 @@
 - [ ] Create integration tests for TradingLevels component
 - [ ] Create smoke tests for page load and critical flows
 - [x] Verify site loads without crashing
+
+## Token Re-evaluation (Jan 4, 2026)
+- [x] Gather current prices and 24h changes for all 12 tokens
+- [x] Analyze volume trends and momentum shifts
+- [x] Re-assess technical setups (HTF/LTF)
+- [x] Update conviction levels based on new data
+- [x] Recalculate optimal $50k allocation
+- [x] Update website with revised recommendations
