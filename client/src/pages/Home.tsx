@@ -192,15 +192,15 @@ export default function Home() {
           <LivePriceTicker symbols={allSymbols} />
         </section>
 
-        {/* Smart Money Analytics from Nansen */}
-        <section className="mb-12">
+        {/* Smart Money Analytics from Nansen - Temporarily disabled due to API issues */}
+        {/* <section className="mb-12">
           <SmartMoneyIndicator symbols={['SUI', 'LINK', 'APT', 'PYTH', 'EIGEN']} />
-        </section>
+        </section> */}
 
-        {/* Market Dominance Tracker - NEW */}
-        <section className="mb-12">
+        {/* Market Dominance Tracker - Temporarily disabled */}
+        {/* <section className="mb-12">
           <MarketDominance />
-        </section>
+        </section> */}
 
         {/* Executive Summary */}
         <section className="mb-12">

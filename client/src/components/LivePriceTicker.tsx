@@ -69,9 +69,9 @@ export function LivePriceTicker({ symbols }: LivePriceTickerProps) {
         </div>
       </div>
 
-      {isLoading && prices.length === 0 ? (
+      {isLoading && (!prices || prices.length === 0) ? (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-          {symbols.map((symbol) => (
+          {(symbols || []).map((symbol) => (
             <div key={symbol} className="bg-white rounded-lg p-3 animate-pulse">
               <div className="h-4 bg-slate-200 rounded w-12 mb-2"></div>
               <div className="h-6 bg-slate-200 rounded w-20 mb-1"></div>
@@ -81,7 +81,7 @@ export function LivePriceTicker({ symbols }: LivePriceTickerProps) {
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-          {prices.map((token) => (
+          {(prices || []).map((token) => (
             <div
               key={token.symbol}
               className="bg-white rounded-lg p-3 hover:shadow-md transition-shadow border border-slate-100"

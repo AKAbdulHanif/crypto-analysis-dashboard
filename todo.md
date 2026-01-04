@@ -60,3 +60,11 @@
 - [x] Create simple REST endpoints bypassing tRPC
 - [x] Update frontend to use REST API instead of tRPC
 - [x] Test all endpoints and verify data display - WORKING!
+
+## Crash Fix & Testing
+- [x] Fix map() error causing site crashes on published version
+- [x] Add null/undefined checks to all array operations (added || [] fallbacks)
+- [ ] Create integration tests for LivePriceTicker component
+- [ ] Create integration tests for TradingLevels component
+- [ ] Create smoke tests for page load and critical flows
+- [x] Verify site loads without crashing
