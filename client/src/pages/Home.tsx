@@ -4,6 +4,7 @@ import { TrendingUp, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { LivePriceTicker } from "@/components/LivePriceTicker";
 import { UnlockCalendar } from "@/components/UnlockCalendar";
 import { TradingLevels } from "@/components/TradingLevels";
+import { MarketDominance } from "@/components/MarketDominance";
 
 interface TokenMetrics {
   name: string;
@@ -188,6 +189,11 @@ export default function Home() {
         {/* Live Price Ticker */}
         <section className="mb-12">
           <LivePriceTicker symbols={allSymbols} />
+        </section>
+
+        {/* Market Dominance Tracker - NEW */}
+        <section className="mb-12">
+          <MarketDominance />
         </section>
 
         {/* Executive Summary */}

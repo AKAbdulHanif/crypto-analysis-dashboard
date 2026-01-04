@@ -34,6 +34,122 @@ interface CoinGeckoPrice {
 }
 
 export const cryptoRouter = router({
+  getDominance: publicProcedure
+    .query(async () => {
+      try {
+        // Fetch global crypto data for dominance metrics
+        const globalResponse = await axios.get(
+          `${COINGECKO_API_BASE}/global`,
+          { timeout: 10000 }
+        );
+
+        const globalData = globalResponse.data.data;
+        const marketCapPercentages = globalData.market_cap_percentage;
+
+        // Calculate OTHERS.D (100 - BTC.D - ETH.D)
+        const btcDominance = marketCapPercentages.btc || 0;
+        const ethDominance = marketCapPercentages.eth || 0;
+        const othersDominance = 100 - btcDominance - ethDominance;
+
+        // Fetch USDT and USDC market caps for stablecoin dominance
+        const stablecoinsResponse = await axios.get<CoinGeckoPrice[]>(
+          `${COINGECKO_API_BASE}/coins/markets`,
+          {
+            params: {
+              vs_currency: 'usd',
+              ids: 'tether,usd-coin',
+              order: 'market_cap_desc',
+              per_page: 2,
+              page: 1,
+              sparkline: false
+            },
+            timeout: 10000
+          }
+        );
+
+        const totalMarketCap = globalData.total_market_cap.usd;
+        const usdtMarketCap = stablecoinsResponse.data.find(c => c.id === 'tether')?.market_cap || 0;
+        const usdcMarketCap = stablecoinsResponse.data.find(c => c.id === 'usd-coin')?.market_cap || 0;
+
+        const usdtDominance = (usdtMarketCap / totalMarketCap) * 100;
+        const usdcDominance = (usdcMarketCap / totalMarketCap) * 100;
+
+        // Fetch ETHBTC pair data
+        const ethbtcResponse = await axios.get(
+          `${COINGECKO_API_BASE}/simple/price`,
+          {
+            params: {
+              ids: 'ethereum',
+              vs_currencies: 'btc',
+              include_24hr_change: true,
+              include_7d_change: true
+            },
+            timeout: 10000
+          }
+        );
+
+        const ethbtcData = ethbtcResponse.data.ethereum;
+
+        return {
+          success: true,
+          data: {
+            btcDominance: {
+              value: btcDominance,
+              change24h: 0, // CoinGecko doesn't provide 24h change for dominance
+              trend: 'neutral' as 'up' | 'down' | 'neutral'
+            },
+            ethDominance: {
+              value: ethDominance,
+              change24h: 0,
+              trend: 'neutral' as 'up' | 'down' | 'neutral'
+            },
+            othersDominance: {
+              value: othersDominance,
+              change24h: 0,
+              trend: 'neutral' as 'up' | 'down' | 'neutral'
+            },
+            usdtDominance: {
+              value: usdtDominance,
+              change24h: 0,
+              trend: 'neutral' as 'up' | 'down' | 'neutral'
+            },
+            usdcDominance: {
+              value: usdcDominance,
+              change24h: 0,
+              trend: 'neutral' as 'up' | 'down' | 'neutral'
+            },
+            ethbtc: {
+              value: ethbtcData.btc,
+              change24h: ethbtcData.btc_24h_change || 0,
+              change7d: ethbtcData.btc_7d_change || 0,
+              trend: (ethbtcData.btc_24h_change || 0) >= 0 ? 'up' as const : 'down' as const
+            },
+            altcoinSeasonSignal: {
+              isAltSeason: othersDominance > 40 && btcDominance < 45,
+              strength: othersDominance > 45 ? 'strong' : othersDominance > 40 ? 'moderate' : 'weak',
+              indicators: {
+                btcDominanceFalling: btcDominance < 50,
+                othersDominanceRising: othersDominance > 40,
+                ethbtcRising: (ethbtcData.btc_24h_change || 0) > 0,
+                stablecoinDominanceFalling: (usdtDominance + usdcDominance) < 10
+              }
+            },
+            totalMarketCap,
+            lastUpdated: new Date().toISOString()
+          },
+          timestamp: new Date().toISOString()
+        };
+      } catch (error) {
+        console.error('Error fetching dominance data:', error);
+        return {
+          success: false,
+          data: null,
+          error: error instanceof Error ? error.message : 'Failed to fetch dominance data',
+          timestamp: new Date().toISOString()
+        };
+      }
+    }),
+
   getPrices: publicProcedure
     .input(z.object({
       symbols: z.array(z.string()).optional()
