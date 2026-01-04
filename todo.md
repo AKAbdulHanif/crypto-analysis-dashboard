@@ -20,3 +20,7 @@
 
 ## Deployment
 - [ ] Push code to GitHub repository for scheduled daily runs
+
+## New Tasks
+- [x] Add entry/exit price levels for all 12 tokens (not just 3 high-conviction)
+- [x] Create GitHub repository and push code
