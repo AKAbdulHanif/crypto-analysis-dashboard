@@ -90,3 +90,15 @@
 - [x] Update stop-loss levels based on volatility and risk management
 - [x] Refresh conviction levels and allocation recommendations
 - [x] Update dashboard with all new data and analysis (created ANALYSIS_SUMMARY_JAN5.md)
+
+## RAIL and YEE Token Research (Jan 5, 2026)
+- [x] Gather basic data for RAIL (price, market cap, volume, contract address)
+- [x] Gather basic data for YEE (price, market cap, volume, contract address)
+- [x] Analyze RAIL on-chain metrics via Dune Analytics (no dashboards found)
+- [x] Analyze YEE on-chain metrics via Dune Analytics (no dashboards found)
+- [x] Check RAIL smart money activity via Nansen - HEAVY SELLING (-$29K netflow)
+- [x] Check YEE smart money activity via Nansen - POSITIVE FLOW (+$41.5K netflow)
+- [x] Evaluate RAIL vs existing portfolio tokens - AVOID (illiquid, distribution)
+- [x] Evaluate YEE vs existing portfolio tokens - OPTIONAL micro position (2% max)
+- [x] Update conviction rankings and allocations if warranted - NO CHANGES
+- [x] Update dashboard with new tokens if they make the cut - NEITHER ADDED
