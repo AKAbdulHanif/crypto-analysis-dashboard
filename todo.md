@@ -102,3 +102,20 @@
 - [x] Evaluate YEE vs existing portfolio tokens - OPTIONAL micro position (2% max)
 - [x] Update conviction rankings and allocations if warranted - NO CHANGES
 - [x] Update dashboard with new tokens if they make the cut - NEITHER ADDED
+
+## Daily Analysis Archive System (Jan 5, 2026)
+- [x] Design database schema for daily_price_logs table
+- [x] Design database schema for daily_recommendations table
+- [x] Create Drizzle ORM schema files
+- [x] Run database migrations (pnpm db:push)
+- [x] Create API endpoint for logging daily prices
+- [x] Create API endpoint for logging recommendations
+- [x] Create API endpoint for retrieving historical data
+- [x] Create API endpoint for prediction accuracy stats
+- [x] Register archive router in main routers
+- [x] Build HistoricalPerformance UI component
+- [x] Build AccuracyMetrics UI component (integrated in HistoricalPerformance)
+- [x] Implement automated daily logging script (server/scripts/log-daily-data.ts)
+- [x] Test logging and retrieval functionality (logged 9 prices + 6 recommendations)
+- [ ] Write vitest tests for archive system
+- [x] Add HistoricalPerformance to Home page

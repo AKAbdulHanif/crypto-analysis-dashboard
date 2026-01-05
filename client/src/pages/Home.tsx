@@ -6,6 +6,7 @@ import { SmartMoneyIndicator } from "@/components/SmartMoneyIndicator";
 import { UnlockCalendar } from "@/components/UnlockCalendar";
 import { TradingLevels } from "@/components/TradingLevels";
 import { MarketDominance } from "@/components/MarketDominance";
+import HistoricalPerformance from "@/components/HistoricalPerformance";
 
 interface TokenMetrics {
   name: string;
@@ -463,7 +464,17 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Key Insights */}
+        {/* Historical Performance Section */}
+        <section>
+          <h2 className="text-3xl font-bold text-slate-900 mb-6">📊 Historical Performance & Prediction Accuracy</h2>
+          <div className="space-y-6">
+            <HistoricalPerformance symbol="SUI" />
+            <HistoricalPerformance symbol="LINK" />
+            <HistoricalPerformance symbol="ASTER" />
+          </div>
+        </section>
+
+        {/* Key Findings */}
         <section>
           <h2 className="text-3xl font-bold text-slate-900 mb-6">Key Insights</h2>
           
