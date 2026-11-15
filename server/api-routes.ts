@@ -1,8 +1,7 @@
 import { Router } from 'express';
 import axios from 'axios';
-
+import { getTokenData } from './nansen-client';
 const router = Router();
-
 const CMC_API_BASE = 'https://api.coinmarketcap.com/data-api/v3';
 const NANSEN_API_KEY = process.env.NANSEN_API_KEY || '';
 
@@ -191,39 +190,17 @@ router.get('/dominance', async (req, res) => {
 router.get('/nansen', async (req, res) => {
   try {
     if (!NANSEN_API_KEY) {
-      throw new Error('Nansen API key not configured');
+      res.status(503).json({ success: false, data: [], error: 'Nansen data unavailable' });
+      return;
     }
 
-    const response = await axios.post(
-      'https://api.nansen.ai/api/v1/token-screener',
-      {
-        chains: ['ethereum', 'solana'],
-        timeframe: '24h',
-        pagination: { page: 1, per_page: 50 },
-        filters: { only_smart_money: false },
-        order_by: [{ field: 'volume', direction: 'DESC' }]
-      },
-      {
-        headers: {
-          'apiKey': NANSEN_API_KEY,
-          'Content-Type': 'application/json'
-        },
-        timeout: 15000
-      }
-    );
-
-    res.json({
-      success: true,
-      data: response.data.data || [],
-      timestamp: new Date().toISOString()
-    });
-  } catch (error: any) {
-    console.error('Error fetching Nansen data:', error.response?.data || error.message);
-    res.status(500).json({
-      success: false,
-      data: [],
-      error: error.response?.data?.message || error.message || 'Failed to fetch Nansen data'
-    });
+    const result = await getTokenData(undefined, new Date(), true);
+    // A complete nonempty, validated camelCase adapter contract prevents empty
+    // "Live Data" badges and missing holderCount crashes in the dormant caller.
+    res.status(result.success ? 200 : 503).json(result);
+  } catch {
+    // Raw Axios errors and provider messages can contain credentials.
+    res.status(503).json({ success: false, data: [], error: 'Nansen data unavailable' });
   }
 });
 
